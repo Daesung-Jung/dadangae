@@ -6,6 +6,7 @@ Baseball broadcasting scraping and automatic edit by Deep Learning
 edit broadcasting slow video, research only hand detection.
 grip, finger, writst with tracked ball  
 
+
 ### category
 
 - main 
@@ -13,16 +14,20 @@ grip, finger, writst with tracked ball
 - mobile
 - etc
 
+
 #### main
 auto edit base on yolov5
 analysis frame
+
 
 #### scraping
 daum video download 60fps, 1920x1080  
 - 2021
 - 2020
 
+
 #### mobile
+
 
 #### etc
 - folder name 
