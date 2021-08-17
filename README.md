@@ -9,10 +9,10 @@ grip, finger, writst with tracked ball
 
 ### category
 
-- 1. main 
-- 2. scraping
-- 3. mobile
-- 4. etc
+- main 
+- scraping
+- mobile
+- etc
 
 
 #### 1. main
