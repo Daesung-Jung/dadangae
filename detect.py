@@ -3,7 +3,7 @@
 Usage:
     $ python path/to/detect.py --source path/to/img.jpg --weights yolov5s.pt --img 640
 """
-
+import pandas as pd
 import argparse
 import sys
 import time
@@ -24,6 +24,8 @@ from utils.plots import colors, plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_sync
 
 
+ff_=[]
+cf_=[]
 @torch.no_grad()
 def run(weights='yolov5s.pt',  # model.pt path(s)
         source='data/images',  # file/dir/URL/glob, 0 for webcam
@@ -165,6 +167,10 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                         plot_one_box(xyxy, im0, label=label, color=colors(c, True), line_thickness=line_thickness)
                         if save_crop:
                             save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+                
+                ff_.append(frame)
+                cf_.append(conf)
+                
             if 'zoom_in' in s:
                 for *xyxy, conf, cls in reversed(det):
                     c = int(cls)
@@ -254,3 +260,11 @@ def main(opt):
 if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
+
+
+
+
+df_=pd.DataFrame({"frame":ff_,
+                         "conf":cf_})
+
+df_.to_csv('/content/drive/MyDrive/dp/joomin/dataset/dataframe/frame_conf.csv')
