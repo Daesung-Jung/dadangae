@@ -9,27 +9,27 @@ grip, finger, writst with tracked ball
 
 ### category
 
-- main 
-- scraping
-- mobile
-- etc
+- 1. main 
+- 2. scraping
+- 3. mobile
+- 4. etc
 
 
-#### main
+#### 1. main
 auto edit base on yolov5
 analysis frame
 
 
-#### scraping
+#### 2. scraping
 daum video download 60fps, 1920x1080  
 - 2021
 - 2020
 
 
-#### mobile
+#### 3. mobile
 
 
-#### etc
+#### 4. etc
 - folder name 
 - frame cut
 - frame jump
