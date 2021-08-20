@@ -33,4 +33,4 @@ save_period: -1
 artifact_alias: latest
 local_rank: -1
 freeze: 0
-save_dir: runs/train/elbow_bg_all_plus
+save_dir: runs/train/elbow_bg_all_plus2
