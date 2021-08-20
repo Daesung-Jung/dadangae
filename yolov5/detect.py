@@ -8,10 +8,13 @@ import argparse
 import sys
 import time
 from pathlib import Path
-
+import time
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
+
+ff_=[]
+cf_=[]
 
 FILE = Path(__file__).absolute()
 sys.path.append(FILE.parents[0].as_posix())  # add yolov5/ to path
@@ -24,8 +27,6 @@ from utils.plots import colors, plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_sync
 
 
-ff_=[]
-cf_=[]
 @torch.no_grad()
 def run(weights='yolov5s.pt',  # model.pt path(s)
         source='data/images',  # file/dir/URL/glob, 0 for webcam
@@ -53,9 +54,10 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
         half=False,  # use FP16 half-precision inference
         ):
     folder_name = source.split('/')[-1:][0].replace('.mp4','')
-    folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/images/%s" %folder_name)
+    weights_= weights[0].split('/')[-1:][0].replace('.pt','')
+    folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/images/%s_%s" %(folder_name,weights_))
     folder_path.mkdir(parents=True, exist_ok=True)
-    folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/labels/%s" %folder_name)
+    folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/labels/%s_%s" %(folder_name,weights_))
     folder_path.mkdir(parents=True, exist_ok=True)
     count=0
     save_img = not nosave and not source.endswith('.txt')  # save inference images
@@ -167,7 +169,7 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                         plot_one_box(xyxy, im0, label=label, color=colors(c, True), line_thickness=line_thickness)
                         if save_crop:
                             save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-                
+                            
                 ff_.append(frame)
                 cf_.append(conf)
                 
@@ -177,10 +179,10 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                     label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                     plot_one_box(xyxy, im0, label=label, color=colors(c, True), line_thickness=line_thickness)
                 result, encoded_img = cv2.imencode(".jpg", im0)
-                encoded_img.tofile('/content/drive/MyDrive/dp/joomin/dataset/images/%s/%s_%s.jpg' %(folder_name,f'{frame}',conf))
+                encoded_img.tofile('/content/drive/MyDrive/dp/joomin/dataset/images/%s_%s/%s_%s.jpg' %(folder_name,weights_,f'{frame}',conf))
                 xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                 line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
-                with open('/content/drive/MyDrive/dp/joomin/dataset/labels/%s/%s_%s.txt' %(folder_name,f'{frame}',conf), 'a') as f:
+                with open('/content/drive/MyDrive/dp/joomin/dataset/labels/%s_%s/%s_%s.txt' %(folder_name,weights_,f'{frame}',conf), 'a') as f:
                     f.write(('%g ' * len(line)).rstrip() % line + '\n')
               
 
@@ -220,6 +222,10 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
 
     print(f'Done. ({time.time() - t0:.3f}s)')
 
+df_=pd.DataFrame({"frame":ff_,
+                         "conf":cf_})
+x=time.time()
+df_.to_csv('/content/drive/MyDrive/dp/joomin/dataset/dataframe/%s.csv' %x)
 
 def parse_opt():
     parser = argparse.ArgumentParser()
@@ -261,10 +267,3 @@ if __name__ == "__main__":
     opt = parse_opt()
     main(opt)
 
-
-
-
-df_=pd.DataFrame({"frame":ff_,
-                         "conf":cf_})
-
-df_.to_csv('/content/drive/MyDrive/dp/joomin/dataset/dataframe/frame_conf.csv')

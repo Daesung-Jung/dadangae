@@ -7,16 +7,13 @@ from pathlib import Path
 
 import torch
 import yaml
-from yolov5.utils.general import yolov5_in_syspath
 
 sys.path.append('./')  # to run '$ python *.py' files in subdirectories
 
 port = 0  # --master_port
 path = Path('').resolve()
-
 for last in path.rglob('*/**/last.pt'):
-    with yolov5_in_syspath():
-        ckpt = torch.load(last)
+    ckpt = torch.load(last)
     if ckpt['optimizer'] is None:
         continue
 
@@ -31,7 +28,7 @@ for last in path.rglob('*/**/last.pt'):
 
     if ddp:  # multi-GPU
         port += 1
-        cmd = f'python -m torch.distributed.launch --nproc_per_node {nd} --master_port {port} train.py --resume {last}'
+        cmd = f'python -m torch.distributed.run --nproc_per_node {nd} --master_port {port} train.py --resume {last}'
     else:  # single-GPU
         cmd = f'python train.py --resume {last}'
 
