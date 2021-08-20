@@ -222,10 +222,10 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
 
     print(f'Done. ({time.time() - t0:.3f}s)')
 
-df_=pd.DataFrame({"frame":ff_,
-                         "conf":cf_})
-x=time.time()
-df_.to_csv('/content/drive/MyDrive/dp/joomin/dataset/dataframe/%s.csv' %x)
+    #프레임별 conf 값 데이터 추출
+    df_=pd.DataFrame({"frame":ff_,
+                            "conf":cf_})
+    df_.to_csv('/content/drive/MyDrive/dp/joomin/dataset/dataframe/%s.csv' % weights)
 
 def parse_opt():
     parser = argparse.ArgumentParser()
