@@ -5,6 +5,16 @@ Created on Sat Apr 18 08:34:35 2020
 @author: shtnr
 """
 
+def cap_slomo(path = "/content/drive/MyDrive/project_ddg/rawdata_video/2/" ):
+    
+  path = path
+  file_list_ = os.listdir(path)
+  for aa in range(start-1,end):
+      
+    print(aa+1, file_list_[aa], "실행합니다")
+    #변수명을 직접 넣으면 안돼서 {}활용 
+    file_name_=file_list_[aa]
+    !python detect.py --weight /content/drive/MyDrive/baseball_pitchdesign/weight/elbow_bg_all_plus_600.pt --im
 
 import glob
 import pandas as pd
@@ -52,5 +62,9 @@ not_last_data['dt'].hist()
 not_last_data[not_last_data['dt'].max()==not_last_data['dt']]
 
 
+under_257g = not_last_data[not_last_data['dt']<2.57]
 
-not_last_data[not_last_data['dt']<2.57]
+
+
+under_257g.to_csv("c:/data/under_2.57g_list.csv")
+
