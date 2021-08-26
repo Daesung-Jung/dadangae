@@ -198,7 +198,7 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                 #비어있지 않은 경우 만약 연속 되는 경우는 넣어준다.
                 else:
                     if frame_count in frame_arr:
-                        frame_arr.append(frame_count+1)
+                        frame_arr.append(frame_count+10)
             #줌인이 아닐때
             else:
                 #연속된 프레임이 끊기는 거면 시작과 끝만 전체 프레임리스트에 넣어줌
