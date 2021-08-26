@@ -132,3 +132,15 @@ our_=our_df['tt'].str.split(".mp4").str[0]
 '''
 need[~need.isin(our_)]
 
+
+
+
+file= "C:/code/baseball_pitchdesign/video_scraping/data/need_list_2021.csv"
+need_list=pd.read_csv(file)
+
+df['gameId']
+
+#진짜 필요한 리스트
+qq=df[(df['gameId']+".mp4").isin(need_list[need_list['complete']=="x"]['tt'])]
+qq.to_csv("C:/code/baseball_pitchdesign/video_scraping/data/final_need_2021.csv")
+
