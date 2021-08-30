@@ -53,11 +53,11 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
         ):
     #폴더생성 by 양
     folder_name = source.split('/')[-1:][0].replace('.mp4','')
-    folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/images/%s" %folder_name)
+    folder_path = Path("/content/drive/MyDrive/project_ddg/zoom_in/images/%s" %folder_name)
     folder_path.mkdir(parents=True, exist_ok=True)
-    folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/labels/%s" %folder_name)
+    folder_path = Path("/content/drive/MyDrive/project_ddg/zoom_in/labels/%s" %folder_name)
     folder_path.mkdir(parents=True, exist_ok=True)
-    folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/videos/%s" %folder_name)
+    folder_path = Path("/content/drive/MyDrive/project_ddg/zoom_in/videos/%s" %folder_name)
     folder_path.mkdir(parents=True, exist_ok=True)
     count=0
     save_img = not nosave and not source.endswith('.txt')  # save inference images
@@ -357,7 +357,7 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
     df=pd.DataFrame(frame_start_end)
     df.columns=["start","end","cut_check"]
 
-    df.to_csv('/content/drive/MyDrive/dp/joomin/dataset/start_end/%s.csv' %(folder_name), sep=',', na_rep='NaN')
+    df.to_csv('/content/drive/MyDrive/project_ddg/zoom_in/start_end/%s.csv' %(folder_name), sep=',', na_rep='NaN')
 
     folder_count=0
     #연속된 프레임 리스트에 있는 것만 검사해주는 반복문 by 양
@@ -367,11 +367,11 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
         #원하는 곳만 이미지를 읽어오는 클래스
         dataset = LoadImages_Select(source, img_size=imgsz, stride=stride, frame_arr=frame_list)
         #연속된 프레임별 이미지가 저장될 폴더 생성  
-        folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/images/%s/%s" %(folder_name,folder_count))
+        folder_path = Path("/content/drive/MyDrive/project_ddg/zoom_in/images/%s/%s" %(folder_name,folder_count))
         folder_path.mkdir(parents=True, exist_ok=True)
-        folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/labels/%s/%s" %(folder_name,folder_count))
+        folder_path = Path("/content/drive/MyDrive/project_ddg/zoom_in/labels/%s/%s" %(folder_name,folder_count))
         folder_path.mkdir(parents=True, exist_ok=True)
-        folder_path = Path("/content/drive/MyDrive/dp/joomin/dataset/videos/%s/%s" %(folder_name,folder_count))
+        folder_path = Path("/content/drive/MyDrive/project_ddg/zoom_in/videos/%s/%s" %(folder_name,folder_count))
         folder_path.mkdir(parents=True, exist_ok=True)
 
         for path, img, im0s, vid_cap in dataset:          
@@ -439,12 +439,12 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                 #jpg파일 변환
                 result, encoded_img = cv2.imencode(".jpg", im0)
                 #이미지파일 저장
-                encoded_img.tofile('/content/drive/MyDrive/dp/joomin/dataset/images/%s/%s/%s_%s.jpg' %(folder_name,folder_count,frame,conf))
+                encoded_img.tofile('/content/drive/MyDrive/project_ddg/zoom_in/images/%s/%s/%s_%s.jpg' %(folder_name,folder_count,frame,conf))
                 #라벨 정보 받아오기
                 xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                 line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
                 #라벨 저장
-                with open('/content/drive/MyDrive/dp/joomin/dataset/labels/%s/%s/%s_%s.txt' %(folder_name,folder_count,frame,conf), 'a') as f:
+                with open('/content/drive/MyDrive/project_ddg/zoom_in/labels/%s/%s/%s_%s.txt' %(folder_name,folder_count,frame,conf), 'a') as f:
                     f.write(('%g ' * len(line)).rstrip() % line + '\n')
                 # Save results (image with detections)
                 if mkvid:
@@ -462,7 +462,7 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
                             else:  # stream
                                 fps, w, h = 30, im0.shape[1], im0.shape[0]
                                 save_path += '.mp4'
-                            vid_writer[i] = cv2.VideoWriter('/content/drive/MyDrive/dp/joomin/dataset/videos/%s/%s/%s_%s.mp4' %(folder_name,folder_count,folder_name,folder_count), cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
+                            vid_writer[i] = cv2.VideoWriter('/content/drive/MyDrive/project_ddg/zoom_in/videos/%s/%s/%s_%s.mp4' %(folder_name,folder_count,folder_name,folder_count), cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                         vid_writer[i].write(im0)
 
                 # Print time (inference + NMS)
