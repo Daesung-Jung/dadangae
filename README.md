@@ -8,7 +8,7 @@ grip, finger, writst with tracked ball
 
 
 ### category
-
+#양준환
 - main 
 - scraping
 - mobile
