@@ -47,9 +47,17 @@ handsModule = mediapipe.solutions.hands
  
 #불러오기 0을 넣으면 캠으로 변함
 baseball_sample2="c:/data/real_pitching/samsung_s10_5g/20210806_183756"
-
+baseball_sample = baseball_sample2.split("/")[-1]
 capture = cv2.VideoCapture("%s.mp4" %baseball_sample2)
- 
+
+
+folder_path = Path("c:/data/real_pitching/pics/%s" %baseball_sample)
+folder_path.mkdir(parents=True, exist_ok=True)
+
+folder_path = Path("c:/data/real_pitching/df")
+folder_path.mkdir(parents=True, exist_ok=True)
+
+
 #가로 세로 이미지 사이즈,  x, y같은 경우 나중 이값을 곱해줘서 사용할 수 있다 -> 절대값
 frameWidth = capture.get(cv2.CAP_PROP_FRAME_WIDTH)
 frameHeight = capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
@@ -67,7 +75,8 @@ with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.80, m
         ret, image = capture.read()
         #해당 프레임 손만 추출한 결과
         results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-        
+        if not ret:
+          break        
         
         if results.multi_hand_landmarks != None:
             # handLandmarks 튜플형식으로 데이터가 떨어지는 데 이때 잘 쪼갬 
@@ -75,10 +84,12 @@ with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.80, m
             for handLandmarks in results.multi_hand_landmarks:  
                 #그리기
                 mp_drawing.draw_landmarks(
-                    image, handLandmarks, mp_hands.HAND_CONNECTIONS,
-                    drawing_styles.get_default_hand_landmark_style(),
-                    drawing_styles.get_default_hand_connection_style())
-                cv2.imshow('MediaPipe Hands', image)
+                    image, handLandmarks, mp_hands.HAND_CONNECTIONS),
+#                    drawing_styles.get_default_hand_landmark_style(),
+#                    drawing_styles.get_default_hand_connection_style())
+#                cv2.imshow('MediaPipe Hands', image)
+                result, encoded_img = cv2.imencode(".jpg", image)
+                encoded_img.tofile('c:/data/real_pitching/pics/%s/%s.jpg' %(baseball_sample2, c))
         
                 #손이 찍힌 것만 프레임 받아옴
                 frame.append(c)
@@ -113,6 +124,6 @@ with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.80, m
         #cv2.imshow('Test hand', frame) 
         if cv2.waitKey(1) == 27:
             break
-
-df.to_csv("c:/data/hand_detect.csv")        
+        
+df.to_csv("c:/data/real_pitching/df/%s.csv" %baseball_sample2)        
         
