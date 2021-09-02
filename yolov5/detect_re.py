@@ -115,20 +115,30 @@ def run(weights='yolov5s.pt',  # model.pt path(s)
     
     re_path = "/content/drive/MyDrive/project_ddg/zoom_in/images/"+folder_number+'/'+folder_name
     s_list=os.listdir(re_path)
-    start_end=[]
-    for list_1 in s_list:
-        f_list = os.listdir(re_path+'/'+list_1)
-        start_end.append([f_list[0].split('_')[0],f_list[-1].split('_')[0]])
+    ss_list=[]
 
+    for li in s_list:
+        ss_list.append(int(li))
+
+    start_end=[]
+    ss_list = sorted(ss_list)
+    
+    for list_1 in ss_list:
+        f_list = os.listdir(re_path+'/'+str(list_1))
+        f_list = sorted(f_list)
+        start_end.append([f_list[0].split('_')[0],f_list[-1].split('_')[0]])
+    
     frame_start_end=[]
 
+    frame_start_end.append([int(start_end[0][0]),int(start_end[0][1]),False])
     for i in range(1,len(start_end)):
         if (int(start_end[i][0])-int(start_end[i-1][1]))<80:
+            frame_start_end.pop()
             frame_start_end.append([int(start_end[i-1][0]),int(start_end[i][1]),True])
         else:
             frame_start_end.append([int(start_end[i][0]),int(start_end[i][1]),False])
-    if len(start_end)==1:
-        frame_start_end.append([int(start_end[0][0]),int(start_end[0][1]),False])
+
+        
 
     df=pd.DataFrame(frame_start_end)
     df.columns=["start","end","cut_check"]
